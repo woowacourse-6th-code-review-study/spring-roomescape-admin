@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.annotation.DirtiesContext;
 import roomescape.dto.ReservationResponse;
 
@@ -16,12 +17,17 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class AdminApiControllerTest {
 
+    @LocalServerPort
+    int randomServerPort;
+
     @BeforeEach
     public void initReservation() {
+        RestAssured.port = randomServerPort;
+
         for (int i = 0; i < 4; i++) {
             Map<String, String> params = new HashMap<>();
             params.put("name", "브라운");
